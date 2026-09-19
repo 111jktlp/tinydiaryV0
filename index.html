@@ -310,9 +310,13 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 /* ============================================================
    WRITE / EDIT
    ============================================================ */
-.write-meta{ display:flex; align-items:baseline; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
+.write-meta{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
 .write-meta .d{ font-weight:700; color: var(--accent-dark); }
 .write-meta .t{ color: var(--ink-soft); font-size:0.9rem; }
+.write-meta input[type=date], .write-meta input[type=time]{
+  border:1.5px solid var(--line); background: var(--surface); color: var(--ink);
+  border-radius: 10px; padding:7px 10px; font-family: var(--font-body); font-weight:700; font-size:0.85rem;
+}
 .mode-toggle{ display:flex; gap:6px; margin-bottom:14px; background: var(--surface); padding:4px; border-radius:14px; width:fit-content; }
 .mode-toggle button{ border:none; background:transparent; padding:7px 14px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; color: var(--ink-soft); }
 .mode-toggle button.active{ background: var(--accent); color:#fff; }
@@ -358,14 +362,14 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
    ============================================================ */
 .taglist{ display:flex; flex-direction:column; gap:8px; margin-bottom:22px; }
 .taglist-item{ display:flex; align-items:center; gap:12px; background: var(--surface); border-radius: var(--radius-s); padding:11px 14px; }
-.taglist-item .ic{ font-size:1.2rem; width:30px; text-align:center; }
+.taglist-item .ic{ font-size:1.2rem; width:30px; height:30px; text-align:center; display:flex; align-items:center; justify-content:center; line-height:1; flex-shrink:0; }
 .taglist-item .nm{ flex:1; font-weight:700; }
 .taglist-item .ops{ display:flex; gap:6px; }
 .taglist-item .ops button{ width:32px; height:32px; font-size:0.85rem; }
 
 .tag-form{ background: var(--surface); border-radius: var(--radius-m); padding:18px; }
 .icon-grid{ display:flex; flex-wrap:wrap; gap:8px; margin: 6px 0 16px; }
-.icon-opt{ width:42px; height:42px; border-radius:12px; border:1.5px solid var(--line); background: var(--surface-raised); font-size:1.15rem; cursor:pointer; }
+.icon-opt{ width:42px; height:42px; border-radius:12px; border:1.5px solid var(--line); background: var(--surface-raised); font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0; }
 .icon-opt.selected{ border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, var(--surface-raised)); }
 .color-grid{ display:flex; gap:8px; margin: 6px 0 18px; }
 .color-opt{ width:30px; height:30px; border-radius:50%; border:2px solid transparent; cursor:pointer; }
@@ -526,8 +530,8 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
           <button class="btn-icon" id="write-close" aria-label="Cancel">✕</button>
         </div>
         <div class="write-meta">
-          <span class="d" id="write-date"></span>
-          <span class="t" id="write-time"></span>
+          <input type="date" id="write-date-input" class="write-date-input" aria-label="Date">
+          <input type="time" id="write-time-input" class="write-time-input" aria-label="Time">
         </div>
 
         <div class="mode-toggle" id="write-mode-toggle">
@@ -850,14 +854,21 @@ const Audio = (function(){
     stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     chunks = [];
     mediaRecorder = new MediaRecorder(stream);
-    mediaRecorder.ondataavailable = e => { if(e.data.size>0) chunks.push(e.data); };
-    mediaRecorder.start();
+    mediaRecorder.ondataavailable = e => { if(e.data && e.data.size>0) chunks.push(e.data); };
+    // A timeslice makes the recorder flush data periodically instead of only at stop() —
+    // more reliable on mobile Safari, which has historically dropped the final chunk otherwise.
+    mediaRecorder.start(1000);
   }
   function stopRecording(){
     return new Promise((resolve)=>{
       if(!mediaRecorder){ resolve(null); return; }
+      // Use whatever mimeType the browser actually negotiated (read back from the
+      // recorder instance) instead of assuming one. Hardcoding 'audio/webm' here was the
+      // root cause of broken playback on browsers (notably iOS Safari) that record
+      // audio/mp4: the Blob ended up mislabeled, so <audio> refused to decode it.
+      const actualType = mediaRecorder.mimeType || 'audio/webm';
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const blob = new Blob(chunks, { type: actualType });
         if(stream){ stream.getTracks().forEach(t=>t.stop()); stream = null; }
         resolve(blob);
       };
@@ -939,9 +950,7 @@ function ensureInitialData(){
   Storage.setTags(DEFAULT_TAGS);
   const today = todayISO();
   const demo = [
-    { id: uid(), type:'text', date: addDays(today,-2), time:'09:14', text:'Had an idea for the installation — maybe the lights should respond to sound instead of motion.', tags:['ideas','work'], createdAt: new Date().toISOString(), demo:true },
-    { id: uid(), type:'text', date: addDays(today,-1), time:'20:41', text:'Beautiful sunset today. Sat outside for a while and just watched the sky change colour.', tags:['personal'], createdAt: new Date().toISOString(), demo:true },
-    { id: uid(), type:'text', date: today, time:'08:02', text:'Good morning, future me. This is Sprout — your tiny diary. Tap the pencil any time something happens.', tags:['personal'], createdAt: new Date().toISOString(), demo:true }
+    { id: uid(), type:'text', date: today, time: timeHM(), text:'hiii', tags:[], createdAt: new Date().toISOString(), demo:true }
   ];
   Storage.setNotes(demo);
   Storage.setFlag('initialized', true);
@@ -962,6 +971,7 @@ const State = {
   writeSelectedTags: [],
   writeAudioBlob: null,
   writeAudioDuration: 0,
+  writeAudioIsNew: false,
   writeAudioPlaying: false,
   isRecording: false,
   recordSeconds: 0,
@@ -999,6 +1009,7 @@ function openWriteNew(date){
   State.writeTime = timeHM();
   State.writeSelectedTags = [];
   State.writeMode = 'text';
+  State.writeAudioIsNew = false;
   discardAudioDraft();
   document.getElementById('write-title').textContent = 'New memory';
   document.getElementById('write-textarea').value = '';
@@ -1017,13 +1028,23 @@ async function openWriteEdit(id){
   State.writeTime = note.time;
   State.writeSelectedTags = (note.tags||[]).slice();
   State.writeMode = note.type;
+  State.writeAudioIsNew = false;
   document.getElementById('write-title').textContent = 'Edit memory';
   document.getElementById('write-textarea').value = note.text || '';
   if(note.type === 'audio'){
     State.writeAudioDuration = note.duration || 0;
     if(note.audioId){
-      const blob = await Audio.getAudio(note.audioId);
-      State.writeAudioBlob = blob;
+      try{
+        const blob = await Audio.getAudio(note.audioId);
+        State.writeAudioBlob = blob;
+        if(!blob){ toast('The saved recording for this note could not be found.'); }
+      }catch(err){
+        console.error('Failed to load audio for note', id, err);
+        State.writeAudioBlob = null;
+        toast('Couldn\'t load the saved recording. Try again, or re-record it.');
+      }
+    } else {
+      State.writeAudioBlob = null;
     }
   } else {
     discardAudioDraft();
@@ -1170,8 +1191,8 @@ function renderDay(){
    WRITE VIEW RENDER
    ============================================================ */
 function renderWriteMeta(){
-  document.getElementById('write-date').textContent = formatLongDate(State.writeDate);
-  document.getElementById('write-time').textContent = State.writeTime;
+  document.getElementById('write-date-input').value = State.writeDate;
+  document.getElementById('write-time-input').value = State.writeTime;
 }
 function renderTagPicker(){
   const tags = Storage.getTags();
@@ -1216,6 +1237,7 @@ function renderAudioPanel(){
 function discardAudioDraft(){
   State.writeAudioBlob = null;
   State.writeAudioDuration = 0;
+  State.writeAudioIsNew = false;
   State.recordSeconds = 0;
   State.isRecording = false;
   if(State.recordTimerHandle){ clearInterval(State.recordTimerHandle); State.recordTimerHandle = null; }
@@ -1230,6 +1252,7 @@ async function handleRecordToggle(){
     if(blob){
       State.writeAudioBlob = blob;
       State.writeAudioDuration = State.recordSeconds;
+      State.writeAudioIsNew = true;
     }
     renderAudioPanel();
     return;
@@ -1249,6 +1272,7 @@ async function handleRecordToggle(){
     State.isRecording = true;
     State.recordSeconds = 0;
     State.writeAudioBlob = null;
+    State.writeAudioIsNew = false;
     renderAudioPanel();
     State.recordTimerHandle = setInterval(()=>{
       State.recordSeconds++;
@@ -1273,12 +1297,20 @@ async function handleRecordToggle(){
 }
 
 let previewAudioEl = null;
+let previewAudioUrl = null;
 function playBlob(blob){
-  if(!blob) return;
-  const url = URL.createObjectURL(blob);
+  if(!blob){ toast('No recording found to play.'); return; }
   if(previewAudioEl){ previewAudioEl.pause(); }
-  previewAudioEl = new window.Audio(url);
-  previewAudioEl.play().catch(()=> toast('Playback failed.'));
+  if(previewAudioUrl){ URL.revokeObjectURL(previewAudioUrl); previewAudioUrl = null; }
+  previewAudioUrl = URL.createObjectURL(blob);
+  previewAudioEl = new window.Audio(previewAudioUrl);
+  previewAudioEl.addEventListener('ended', ()=>{
+    if(previewAudioUrl){ URL.revokeObjectURL(previewAudioUrl); previewAudioUrl = null; }
+  }, { once:true });
+  previewAudioEl.play().catch((err)=>{
+    console.error('Playback failed', err);
+    toast('This browser couldn\'t play the recording.');
+  });
 }
 
 /* ============================================================
@@ -1498,6 +1530,12 @@ document.getElementById('search-filters').addEventListener('click', (e)=>{
   State.searchTag = btn.dataset.filter === 'all' ? null : btn.dataset.filter;
   renderSearch();
 });
+document.getElementById('write-date-input').addEventListener('change', (e)=>{
+  if(e.target.value) State.writeDate = e.target.value;
+});
+document.getElementById('write-time-input').addEventListener('change', (e)=>{
+  if(e.target.value) State.writeTime = e.target.value;
+});
 document.getElementById('settings-import-file').addEventListener('change', (e)=>{
   const file = e.target.files[0];
   if(!file) return;
@@ -1530,49 +1568,80 @@ function saveTagForm(){
 }
 
 async function saveWrite(){
+  // If the user hits Save while still recording, stop the recorder first
+  // instead of rejecting the save (named explicitly as a real-world failure mode).
+  if(State.isRecording){
+    await handleRecordToggle();
+  }
+
   const text = document.getElementById('write-textarea').value.trim();
+  const dateVal = document.getElementById('write-date-input').value;
+  const timeVal = document.getElementById('write-time-input').value;
+  if(!dateVal || !timeVal){
+    toast('Please set a valid date and time.');
+    return;
+  }
+  State.writeDate = dateVal;
+  State.writeTime = timeVal;
+
   if(State.writeMode === 'text' && !text){
     toast('Write a little something before saving.');
     return;
   }
-  if(State.writeMode === 'audio' && !State.writeAudioBlob && !(State.writeEditingId)){
+  if(State.writeMode === 'audio' && !State.writeAudioBlob){
     toast('Record something first, or switch to text.');
     return;
   }
 
-  let audioId = null;
-  if(State.writeMode === 'audio' && State.writeAudioBlob){
-    audioId = uid();
-    try{ await Audio.saveAudio(audioId, State.writeAudioBlob); }
-    catch(err){ toast('Could not save the recording.'); return; }
-  }
+  const baseUpdates = {
+    type: State.writeMode,
+    text: State.writeMode === 'text' ? text : '',
+    tags: State.writeSelectedTags.slice(),
+    date: State.writeDate,
+    time: State.writeTime
+  };
 
   if(State.writeEditingId){
     const existing = Storage.getNoteById(State.writeEditingId);
-    const updates = {
-      type: State.writeMode,
-      text: State.writeMode === 'text' ? text : '',
-      tags: State.writeSelectedTags.slice()
-    };
-    if(State.writeMode === 'audio' && audioId){
-      updates.audioId = audioId;
-      updates.duration = State.writeAudioDuration;
-      if(existing && existing.audioId && existing.audioId !== audioId) Audio.deleteAudio(existing.audioId);
+    const updates = Object.assign({}, baseUpdates);
+
+    if(State.writeMode === 'audio'){
+      if(State.writeAudioIsNew){
+        // A fresh recording was made during this edit: persist it under a new id
+        // and clean up whatever audio was attached before.
+        const newAudioId = uid();
+        try{ await Audio.saveAudio(newAudioId, State.writeAudioBlob); }
+        catch(err){ console.error('Audio save failed', err); toast('Could not save the recording.'); return; }
+        updates.audioId = newAudioId;
+        updates.duration = State.writeAudioDuration;
+        if(existing && existing.audioId && existing.audioId !== newAudioId){ Audio.deleteAudio(existing.audioId); }
+      } else {
+        // Nothing was re-recorded: keep the existing audio attachment as-is,
+        // instead of needlessly re-writing it under a new id on every metadata edit.
+        updates.audioId = existing ? existing.audioId : null;
+        updates.duration = existing ? existing.duration : State.writeAudioDuration;
+      }
+    } else if(existing && existing.audioId){
+      // Switched away from audio (or the recording was removed): detach and
+      // clean up the now-orphaned blob instead of silently leaving it attached.
+      Audio.deleteAudio(existing.audioId);
+      updates.audioId = null;
+      updates.duration = null;
     }
+
     Storage.updateNote(State.writeEditingId, updates);
     toast('Memory updated');
+    State.dayDate = updates.date;
     navigate('day');
   } else {
-    const note = {
-      id: uid(),
-      type: State.writeMode,
-      date: State.writeDate,
-      time: State.writeTime,
-      text: State.writeMode === 'text' ? text : '',
-      tags: State.writeSelectedTags.slice(),
-      createdAt: new Date().toISOString()
-    };
-    if(State.writeMode === 'audio' && audioId){ note.audioId = audioId; note.duration = State.writeAudioDuration; }
+    const note = Object.assign({ id: uid(), createdAt: new Date().toISOString() }, baseUpdates);
+    if(State.writeMode === 'audio'){
+      const newAudioId = uid();
+      try{ await Audio.saveAudio(newAudioId, State.writeAudioBlob); }
+      catch(err){ console.error('Audio save failed', err); toast('Could not save the recording.'); return; }
+      note.audioId = newAudioId;
+      note.duration = State.writeAudioDuration;
+    }
     Storage.saveNote(note);
     State.dayDate = note.date;
     toast('Memory saved 🌱');
