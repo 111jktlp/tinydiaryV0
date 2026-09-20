@@ -8,9 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Silkscreen:wght@400;700&display=swap" rel="stylesheet">
 <style>
-/* ============================================================
-   VARIABLES
-   ============================================================ */
 :root{
   --bg: #EEF2E1;
   --bg-soft: #F8F6E9;
@@ -78,10 +75,6 @@
   --shadow: 0 2px 12px rgba(0,0,0,0.35);
   --shadow-soft: 0 1px 5px rgba(0,0,0,0.3);
 }
-
-/* ============================================================
-   RESET
-   ============================================================ */
 *,*::before,*::after{ box-sizing: border-box; }
 html,body{ height:100%; }
 body{
@@ -97,7 +90,6 @@ p{ margin:0; }
 button{ font-family: inherit; }
 img,svg{ display:block; max-width:100%; }
 ::selection{ background: var(--yellow); color: var(--accent-deep); }
-
 button, a, input, textarea, [tabindex]{
   -webkit-tap-highlight-color: transparent;
 }
@@ -109,10 +101,6 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 @media (prefers-reduced-motion: reduce){
   *{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
 }
-
-/* ============================================================
-   LAYOUT SHELL
-   ============================================================ */
 #app{
   min-height: 100%;
   display:flex;
@@ -142,25 +130,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
 .topnav button:hover{ background: var(--bg-soft); transform: translateY(-1px); }
 .topnav button.active{ background: var(--accent); color: var(--surface-raised); }
 .topbar-quick{ display:none; gap:8px; }
-
 main{ flex:1; display:flex; flex-direction:column; }
 .view{ display:none; flex:1; width:100%; }
 .view.view--active{ display:flex; flex-direction:column; animation: fadeSlide var(--dur) var(--ease); }
 @keyframes fadeSlide{ from{ opacity:0; transform: translateY(6px);} to{ opacity:1; transform:none; } }
-
 .wrap{ width:100%; max-width: 640px; margin:0 auto; padding: 20px 22px 100px; flex:1; display:flex; flex-direction:column; }
-
 .bottomnav{ display:none; }
-
-/* ============================================================
-   DECORATIVE SVG BITS
-   ============================================================ */
 .decor{ position:absolute; inset:0; overflow:hidden; pointer-events:none; z-index:0; }
 .decor svg{ position:absolute; opacity:0.55; }
-
-/* ============================================================
-   HOME
-   ============================================================ */
 #view-home .wrap{ position:relative; z-index:1; align-items:center; text-align:center; justify-content:flex-start; padding-top: 6vh; }
 .home-clock{
   font-family: var(--font-display);
@@ -173,7 +150,6 @@ main{ flex:1; display:flex; flex-direction:column; }
 }
 .home-weekday{ margin-top:14px; font-size:1.15rem; font-weight:700; color: var(--accent-dark); }
 .home-date{ margin-top:4px; font-size:1rem; color: var(--ink-soft); }
-
 .home-actions{
   margin-top: 44px;
   display:grid; grid-template-columns: 1fr 1fr; gap:18px;
@@ -201,13 +177,8 @@ main{ flex:1; display:flex; flex-direction:column; }
 .action-card.newnote .glyph{ background: color-mix(in srgb, var(--yellow) 55%, var(--surface)); }
 .action-card .label{ font-family: var(--font-display); font-weight:700; letter-spacing:0.3px; font-size:0.95rem; }
 .action-card .sub{ font-size:0.78rem; color: var(--ink-soft); font-weight:500; }
-
 .home-recent{ margin-top:46px; width:100%; text-align:left; }
 .home-recent h2{ font-size:0.95rem; color: var(--ink-soft); font-weight:700; margin-bottom:12px; }
-
-/* ============================================================
-   BUTTONS / CHIPS / FORM
-   ============================================================ */
 .btn{
   border:none; cursor:pointer; font-family: var(--font-display); font-weight:700;
   border-radius: 999px; padding: 12px 22px; font-size:0.92rem;
@@ -229,13 +200,11 @@ main{ flex:1; display:flex; flex-direction:column; }
 }
 .btn-icon:hover{ transform: translateY(-2px); background: var(--bg-soft); }
 .btn-block{ width:100%; }
-
 .section-head{
   display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; gap:10px;
 }
 .section-head h1{ font-size:1.3rem; }
 .section-head .actions{ display:flex; gap:8px; }
-
 .field label{ display:block; font-size:0.8rem; font-weight:700; color: var(--ink-soft); margin-bottom:6px; }
 .field input[type=text], .field input[type=search], textarea, select{
   width:100%; border:1.5px solid var(--line); background: var(--surface); color: var(--ink);
@@ -243,10 +212,6 @@ main{ flex:1; display:flex; flex-direction:column; }
 }
 textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .field{ margin-bottom:16px; }
-
-/* ============================================================
-   CALENDAR
-   ============================================================ */
 .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
 .cal-title{ font-size:1.2rem; }
 .cal-nav{ display:flex; gap:6px; align-items:center; }
@@ -267,17 +232,12 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .cal-cell.today .cal-dot{ background:#fff; }
 .cal-dot.audio{ background: var(--pink); }
 .cal-today-btn{ font-size:0.78rem; }
-
-/* ============================================================
-   DAY VIEW
-   ============================================================ */
 .day-head{ margin-bottom:6px; }
 .day-head .back{ display:inline-flex; align-items:center; gap:6px; background:none; border:none; color: var(--ink-soft); font-weight:700; cursor:pointer; padding:6px 0; font-size:0.85rem; }
 .day-head .back:hover{ color: var(--accent-dark); }
 .day-title{ font-size:1.5rem; margin-top:6px; }
 .day-sub{ color: var(--ink-soft); font-size:0.9rem; margin-top:2px; }
 .day-daynav{ display:flex; gap:8px; margin:16px 0 6px; }
-
 .entry-list{ display:flex; flex-direction:column; margin-top:12px; }
 .entry{
   position:relative; padding: 16px 4px 20px 26px; border-left: 2px solid var(--line);
@@ -298,18 +258,10 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .entry-actions{ margin-top:10px; display:flex; gap:8px; }
 .entry-actions button{ font-size:0.76rem; padding:6px 12px; }
 .demo-badge{ display:inline-block; font-size:0.65rem; font-weight:700; color: var(--ink-soft); background: var(--beige); padding:2px 8px; border-radius:999px; margin-left:8px; vertical-align:middle; }
-
-/* ============================================================
-   EMPTY STATES
-   ============================================================ */
 .empty-state{ text-align:center; padding: 42px 10px; color: var(--ink-soft); flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; }
 .empty-state .glyph{ font-size:2.2rem; }
 .empty-state h3{ color: var(--accent-dark); font-size:1.05rem; }
 .empty-state p{ font-size:0.88rem; max-width:280px; }
-
-/* ============================================================
-   WRITE / EDIT
-   ============================================================ */
 .write-meta{ display:flex; align-items:center; gap:10px; margin-bottom:14px; flex-wrap:wrap; }
 .write-meta .d{ font-weight:700; color: var(--accent-dark); }
 .write-meta .t{ color: var(--ink-soft); font-size:0.9rem; }
@@ -320,7 +272,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .mode-toggle{ display:flex; gap:6px; margin-bottom:14px; background: var(--surface); padding:4px; border-radius:14px; width:fit-content; }
 .mode-toggle button{ border:none; background:transparent; padding:7px 14px; border-radius:10px; font-weight:700; font-size:0.82rem; cursor:pointer; color: var(--ink-soft); }
 .mode-toggle button.active{ background: var(--accent); color:#fff; }
-
 .tag-picker{ display:flex; flex-wrap:wrap; gap:8px; margin: 6px 0 18px; }
 .tag-pill{
   border: 1.5px solid var(--line); background: var(--surface); border-radius:999px; padding:8px 14px;
@@ -330,9 +281,7 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 }
 .tag-pill.selected{ background: var(--accent); border-color: var(--accent); color:#fff; transform: scale(1.04); }
 .tag-pill:hover{ border-color: var(--accent); }
-
 .write-actions{ display:flex; gap:10px; margin-top:8px; }
-
 .audio-box{ background: var(--surface); border-radius: var(--radius-m); padding:26px 18px; text-align:center; margin-bottom:16px; }
 .audio-record-btn{
   width:78px; height:78px; border-radius:50%; border:none; background: var(--pink); color:#4a2320; font-size:1.6rem;
@@ -344,10 +293,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .audio-timer{ font-family: var(--font-display); font-weight:700; font-size:1.3rem; color: var(--accent-dark); }
 .audio-hint{ font-size:0.8rem; color: var(--ink-soft); margin-top:6px; }
 .audio-playback{ display:flex; align-items:center; gap:12px; justify-content:center; margin-top:14px; }
-
-/* ============================================================
-   SEARCH
-   ============================================================ */
 .search-box{ display:flex; gap:8px; margin-bottom:14px; }
 .filter-row{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom: 18px; }
 .filter-pill{ border:1.5px solid var(--line); background: var(--surface); border-radius:999px; padding:7px 13px; font-size:0.8rem; font-weight:700; color: var(--ink-soft); cursor:pointer; }
@@ -356,17 +301,12 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .result-item:hover{ transform: translateX(3px); }
 .result-date{ font-size:0.74rem; font-weight:700; color: var(--accent-dark); text-transform:uppercase; letter-spacing:0.4px; }
 .result-text{ margin-top:4px; font-size:0.92rem; color: var(--ink); }
-
-/* ============================================================
-   TAGS MANAGEMENT
-   ============================================================ */
 .taglist{ display:flex; flex-direction:column; gap:8px; margin-bottom:22px; }
 .taglist-item{ display:flex; align-items:center; gap:12px; background: var(--surface); border-radius: var(--radius-s); padding:11px 14px; }
 .taglist-item .ic{ font-size:1.2rem; width:30px; height:30px; text-align:center; display:flex; align-items:center; justify-content:center; line-height:1; flex-shrink:0; }
 .taglist-item .nm{ flex:1; font-weight:700; }
 .taglist-item .ops{ display:flex; gap:6px; }
 .taglist-item .ops button{ width:32px; height:32px; font-size:0.85rem; }
-
 .tag-form{ background: var(--surface); border-radius: var(--radius-m); padding:18px; }
 .icon-grid{ display:flex; flex-wrap:wrap; gap:8px; margin: 6px 0 16px; }
 .icon-opt{ width:42px; height:42px; border-radius:12px; border:1.5px solid var(--line); background: var(--surface-raised); font-size:1.15rem; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0; }
@@ -374,10 +314,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .color-grid{ display:flex; gap:8px; margin: 6px 0 18px; }
 .color-opt{ width:30px; height:30px; border-radius:50%; border:2px solid transparent; cursor:pointer; }
 .color-opt.selected{ border-color: var(--ink); }
-
-/* ============================================================
-   SETTINGS
-   ============================================================ */
 .settings-group{ margin-bottom:26px; }
 .settings-group h2{ font-size:0.82rem; text-transform:uppercase; letter-spacing:0.5px; color: var(--ink-soft); margin-bottom:10px; }
 .settings-card{ background: var(--surface); border-radius: var(--radius-m); padding:16px; }
@@ -385,10 +321,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 .settings-row:last-child{ border-bottom:none; }
 .settings-row .label{ font-weight:700; font-size:0.9rem; }
 .settings-row .desc{ font-size:0.78rem; color: var(--ink-soft); margin-top:2px; }
-
-/* ============================================================
-   DIALOG / TOAST
-   ============================================================ */
 .overlay{
   position:fixed; inset:0; background: rgba(30,38,24,0.35); display:none; align-items:center; justify-content:center; z-index:50; padding:20px;
 }
@@ -402,7 +334,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 @keyframes pop{ from{ transform: scale(0.92); opacity:0;} to{ transform:none; opacity:1;} }
 .dialog p{ margin: 10px 0 20px; color: var(--ink-soft); font-size:0.92rem; }
 .dialog .dialog-actions{ display:flex; gap:10px; justify-content:center; }
-
 .toast{
   position:fixed; bottom:24px; left:50%; transform: translateX(-50%) translateY(20px); z-index:60;
   background: var(--accent-deep); color: var(--cream); padding:12px 22px; border-radius:999px; font-weight:700; font-size:0.86rem;
@@ -410,10 +341,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
   display:flex; align-items:center; gap:8px;
 }
 .toast.show{ opacity:1; transform: translateX(-50%) translateY(0); }
-
-/* ============================================================
-   RESPONSIVE
-   ============================================================ */
 @media (max-width: 640px){
   .topnav{ display:none; }
   .topbar-quick{ display:flex; }
@@ -436,13 +363,6 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
 @media (min-width: 641px){
   .wrap{ max-width: 620px; }
 }
-
-/* ============================================================
-   PERSONAL-WEB / NINTENDO-DS VISUAL LAYER
-   This layer intentionally overrides the original rounded-app
-   styling without changing the diary's functionality.
-   ============================================================ */
-
 :root{
   --font-display: 'Silkscreen','DotGothic16',monospace;
   --font-body: 'DotGothic16',monospace;
@@ -453,12 +373,10 @@ textarea{ resize:vertical; min-height:180px; line-height:1.6; font-size:1rem; }
   --shadow-soft: 2px 2px 0 color-mix(in srgb, var(--accent-deep) 16%, transparent);
   --pixel-line: 1px;
 }
-
 html{
   background: var(--bg);
   image-rendering: pixelated;
 }
-
 body{
   font-family: var(--font-body);
   font-size: 14px;
@@ -468,12 +386,10 @@ body{
     var(--bg);
   transition: background-color 1200ms ease, color 1200ms ease;
 }
-
 h1,h2,h3,h4{
   font-family: var(--font-display);
   letter-spacing: .02em;
 }
-
 .topbar{
   position: sticky;
   padding: 9px 14px;
@@ -482,7 +398,6 @@ h1,h2,h3,h4{
   border-bottom: 1px dashed var(--accent);
   transition: background-color 1200ms ease, border-color 1200ms ease;
 }
-
 .brand{
   font-family: var(--font-display);
   font-size: .82rem;
@@ -490,16 +405,13 @@ h1,h2,h3,h4{
   color: var(--accent-deep);
   letter-spacing: .04em;
 }
-
 .brand-mark{ font-size: 1rem; }
-
 .topnav{
   gap: 2px;
   background: transparent;
   padding: 0;
   box-shadow: none;
 }
-
 .topnav button{
   width:auto;
   height:28px;
@@ -511,41 +423,33 @@ h1,h2,h3,h4{
   font-size: .56rem;
   color: var(--ink-soft);
 }
-
 .topnav button:hover{
   background: var(--surface);
   border-color: var(--line);
   transform: none;
 }
-
 .topnav button.active{
   background: var(--accent);
   color: var(--surface-raised);
   border-color: var(--accent-deep);
   box-shadow: 2px 2px 0 var(--accent-deep);
 }
-
 .wrap{
   max-width: 720px;
   padding: 20px 18px 100px;
 }
-
 .view.view--active{
   animation: webIn 180ms steps(2,end);
 }
-
 @keyframes webIn{
   from{opacity:0; transform:translateY(3px)}
   to{opacity:1; transform:none}
 }
-
-/* little personal-site atmosphere */
 #view-home .wrap{
   align-items: stretch;
   text-align: left;
   padding-top: 5vh;
 }
-
 #view-home .wrap::before{
   content:'✿ personal archive / little corner of the web ✿';
   display:block;
@@ -560,7 +464,6 @@ h1,h2,h3,h4{
   font-size:.52rem;
   box-shadow:var(--shadow-soft);
 }
-
 .home-clock{
   text-align:center;
   font-family:var(--font-display);
@@ -569,13 +472,11 @@ h1,h2,h3,h4{
   color:var(--accent-deep);
   text-shadow:2px 2px 0 color-mix(in srgb, var(--accent) 30%, transparent);
 }
-
 .home-weekday,
 .home-date{
   text-align:center;
   font-family:var(--font-body);
 }
-
 .home-weekday{
   margin-top:12px;
   font-size:.82rem;
@@ -583,17 +484,14 @@ h1,h2,h3,h4{
   text-transform:uppercase;
   letter-spacing:.08em;
 }
-
 .home-date{
   font-size:.74rem;
   color:var(--ink-soft);
 }
-
 .home-actions{
   margin-top:30px;
   gap:12px;
 }
-
 .action-card{
   min-height:150px;
   border:1px solid var(--accent);
@@ -604,7 +502,6 @@ h1,h2,h3,h4{
   position:relative;
   overflow:hidden;
 }
-
 .action-card::before{
   content:'LINK';
   position:absolute;
@@ -614,12 +511,10 @@ h1,h2,h3,h4{
   color:var(--ink-soft);
   opacity:.75;
 }
-
 .action-card:hover{
   transform:translate(-2px,-2px);
   box-shadow:5px 5px 0 color-mix(in srgb, var(--accent-deep) 25%, transparent);
 }
-
 .action-card .glyph{
   width:48px;
   height:48px;
@@ -628,32 +523,27 @@ h1,h2,h3,h4{
   background:color-mix(in srgb, var(--accent) 14%, var(--surface));
   font-size:1.2rem;
 }
-
 .action-card .label{
   font-family:var(--font-display);
   font-size:.68rem;
   text-transform:uppercase;
 }
-
 .action-card .sub{
   font-family:var(--font-body);
   font-size:.65rem;
 }
-
 .home-recent{
   margin-top:34px;
   padding:12px;
   border:1px dashed var(--line);
   background:color-mix(in srgb, var(--surface) 78%, transparent);
 }
-
 .home-recent h2{
   font-family:var(--font-display);
   font-size:.58rem;
   text-transform:uppercase;
   letter-spacing:.08em;
 }
-
 .result-item,
 .settings-card,
 .tag-form,
@@ -664,29 +554,24 @@ h1,h2,h3,h4{
   background:var(--surface);
   box-shadow:var(--shadow-soft);
 }
-
 .result-item{
   padding:10px 12px;
   margin-bottom:8px;
 }
-
 .result-item:hover{
   transform:translateX(2px);
   background:var(--surface-raised);
 }
-
 .section-head{
   border-bottom:1px dashed var(--line);
   padding-bottom:10px;
 }
-
 .section-head h1,
 .cal-title,
 .day-title{
   font-family:var(--font-display);
   text-transform:lowercase;
 }
-
 .btn{
   border-radius:3px;
   border:1px solid var(--accent-dark);
@@ -696,21 +581,17 @@ h1,h2,h3,h4{
   letter-spacing:.02em;
   box-shadow:2px 2px 0 color-mix(in srgb, var(--accent-deep) 20%, transparent);
 }
-
 .btn:hover{
   transform:translate(-1px,-1px);
 }
-
 .btn-primary{
   background:var(--accent);
   color:var(--surface-raised);
 }
-
 .btn-ghost{
   background:var(--surface);
   color:var(--accent-deep);
 }
-
 .btn-icon{
   width:32px;
   height:32px;
@@ -719,7 +600,6 @@ h1,h2,h3,h4{
   box-shadow:1px 1px 0 color-mix(in srgb, var(--accent-deep) 16%, transparent);
   background:var(--surface);
 }
-
 .field input[type=text],
 .field input[type=search],
 textarea,
@@ -732,20 +612,16 @@ select,
   box-shadow:inset 1px 1px 0 color-mix(in srgb, var(--accent) 10%, transparent);
   font-family:var(--font-body);
 }
-
 textarea{
   line-height:1.75;
 }
-
 .cal-grid{
   gap:4px;
 }
-
 .cal-dow{
   font-family:var(--font-display);
   font-size:.52rem;
 }
-
 .cal-cell{
   border:1px solid var(--line);
   border-radius:2px;
@@ -753,24 +629,20 @@ textarea{
   box-shadow:1px 1px 0 color-mix(in srgb, var(--accent-deep) 10%, transparent);
   font-family:var(--font-body);
 }
-
 .cal-cell:hover{
   background:var(--bg-soft);
   transform:none;
   border-color:var(--accent);
 }
-
 .cal-cell.today{
   background:var(--accent);
   border-color:var(--accent-deep);
   box-shadow:2px 2px 0 var(--accent-deep);
 }
-
 .entry{
   padding:14px 4px 18px 20px;
   border-left:1px dashed var(--accent);
 }
-
 .entry::before{
   width:7px;
   height:7px;
@@ -780,18 +652,15 @@ textarea{
   background:var(--accent);
   box-shadow:1px 1px 0 var(--accent-deep);
 }
-
 .entry-time,
 .result-date{
   font-family:var(--font-display);
   font-size:.55rem;
   text-transform:uppercase;
 }
-
 .entry-text{
   font-size:.82rem;
 }
-
 .tag-chip,
 .tag-pill,
 .filter-pill{
@@ -801,29 +670,24 @@ textarea{
   font-family:var(--font-body);
   font-size:.65rem;
 }
-
 .mode-toggle{
   background:transparent;
   border:1px dashed var(--line);
   border-radius:3px;
 }
-
 .mode-toggle button{
   border-radius:2px;
   font-family:var(--font-display);
   font-size:.55rem;
 }
-
 .mode-toggle button.active{
   background:var(--accent);
 }
-
 .audio-box{
   background:
     repeating-linear-gradient(0deg, color-mix(in srgb, var(--accent) 6%, transparent) 0 1px, transparent 1px 5px),
     var(--surface);
 }
-
 .audio-record-btn{
   width:70px;
   height:70px;
@@ -832,51 +696,41 @@ textarea{
   background:color-mix(in srgb, var(--accent) 38%, var(--surface));
   box-shadow:3px 3px 0 color-mix(in srgb, var(--accent-deep) 25%, transparent);
 }
-
 .audio-record-btn.recording{
   border-radius:3px;
 }
-
 .taglist{
   gap:6px;
 }
-
 .taglist-item{
   border:1px dashed var(--line);
   border-radius:3px;
   background:var(--surface);
 }
-
 .icon-opt{
   border-radius:2px;
   border:1px dashed var(--line);
   background:var(--surface-raised);
 }
-
 .color-opt{
   border-radius:2px;
 }
-
 .settings-group h2{
   font-family:var(--font-display);
   font-size:.55rem;
 }
-
 .settings-row{
   border-bottom:1px dashed var(--line);
 }
-
 .overlay{
   background:color-mix(in srgb, var(--accent-deep) 35%, transparent);
   backdrop-filter:none;
 }
-
 .dialog{
   border:1px solid var(--accent);
   border-radius:4px;
   box-shadow:5px 5px 0 color-mix(in srgb, var(--accent-deep) 28%, transparent);
 }
-
 .toast{
   border-radius:3px;
   border:1px solid var(--accent);
@@ -884,8 +738,6 @@ textarea{
   font-size:.55rem;
   box-shadow:3px 3px 0 color-mix(in srgb, var(--accent-deep) 24%, transparent);
 }
-
-/* Small web-style labels / decoration */
 .home-cycle{
   width:100%;
   margin-top:22px;
@@ -909,7 +761,6 @@ textarea{
   background:var(--accent);
   transition:width 900ms linear, background-color 1200ms ease;
 }
-
 @media (max-width:640px){
   .topbar{ padding:7px 10px; }
   .brand{ font-size:.66rem; }
@@ -932,11 +783,9 @@ textarea{
   .home-actions{ gap:8px; }
   .action-card{ min-height:132px; padding:14px 8px; }
 }
-
 @media (min-width:641px){
   .wrap{ max-width:720px; }
 }
-
 </style>
 </head>
 <body>
@@ -1199,9 +1048,6 @@ textarea{
 (function(){
 "use strict";
 
-/* ============================================================
-   STORAGE MODULE (localStorage for notes/tags, IndexedDB for audio)
-   ============================================================ */
 const Storage = (function(){
   const KEY_NOTES = 'sprout_notes_v1';
   const KEY_TAGS = 'sprout_tags_v1';
@@ -1306,9 +1152,6 @@ const Storage = (function(){
            exportData, importData, clearAll, estimateSize };
 })();
 
-/* ============================================================
-   AUDIO MODULE (IndexedDB for blobs + MediaRecorder)
-   ============================================================ */
 const Audio = (function(){
   let db = null;
   let mediaRecorder = null;
@@ -1362,17 +1205,11 @@ const Audio = (function(){
     chunks = [];
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.ondataavailable = e => { if(e.data && e.data.size>0) chunks.push(e.data); };
-    // A timeslice makes the recorder flush data periodically instead of only at stop() —
-    // more reliable on mobile Safari, which has historically dropped the final chunk otherwise.
     mediaRecorder.start(1000);
   }
   function stopRecording(){
     return new Promise((resolve)=>{
       if(!mediaRecorder){ resolve(null); return; }
-      // Use whatever mimeType the browser actually negotiated (read back from the
-      // recorder instance) instead of assuming one. Hardcoding 'audio/webm' here was the
-      // root cause of broken playback on browsers (notably iOS Safari) that record
-      // audio/mp4: the Blob ended up mislabeled, so <audio> refused to decode it.
       const actualType = mediaRecorder.mimeType || 'audio/webm';
       mediaRecorder.onstop = () => {
         const blob = new Blob(chunks, { type: actualType });
@@ -1391,9 +1228,6 @@ const Audio = (function(){
   return { saveAudio, getAudio, deleteAudio, isSupported, startRecording, stopRecording, cancelRecording };
 })();
 
-/* ============================================================
-   UTILITIES
-   ============================================================ */
 function pad(n){ return String(n).padStart(2,'0'); }
 function todayISO(d){ d = d || new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
 function timeHM(d){ d = d || new Date(); return pad(d.getHours())+':'+pad(d.getMinutes()); }
@@ -1437,9 +1271,6 @@ function confirmDialog(title, body){
   });
 }
 
-/* ============================================================
-   DEFAULT TAGS + DEMO DATA
-   ============================================================ */
 const DEFAULT_TAGS = [
   { id:'ideas', name:'Ideas', icon:'💡', color:'#E7B750', createdAt: new Date().toISOString() },
   { id:'music', name:'Music', icon:'🎵', color:'#A9C7D8', createdAt: new Date().toISOString() },
@@ -1463,9 +1294,6 @@ function ensureInitialData(){
   Storage.setFlag('initialized', true);
 }
 
-/* ============================================================
-   APP STATE
-   ============================================================ */
 const State = {
   view: 'home',
   calYear: new Date().getFullYear(),
@@ -1490,9 +1318,6 @@ const State = {
   tagFormColor: COLOR_CHOICES[0],
 };
 
-/* ============================================================
-   ROUTER
-   ============================================================ */
 function navigate(view, opts){
   opts = opts || {};
   State.view = view;
@@ -1562,9 +1387,6 @@ async function openWriteEdit(id){
   renderTagPicker();
 }
 
-/* ============================================================
-   HOME RENDER + CLOCK / DAILY COLOR CYCLE
-   ============================================================ */
 const DAY_THEME_STOPS = [
   { min: 0,    bg:'#B8C9B8', soft:'#C8D7C2', surface:'#EEF2E2', raised:'#F8F8EA', accent:'#7FA878', dark:'#58755A', deep:'#354B39', ink:'#304033', inkSoft:'#627262', line:'#AFC2AD' },
   { min: 300,  bg:'#D4E3C7', soft:'#E1EBCF', surface:'#F7F7E9', raised:'#FFFDF0', accent:'#8FBB79', dark:'#63875F', deep:'#405A3D', ink:'#344534', inkSoft:'#6B7965', line:'#BDD0B4' },
@@ -1691,9 +1513,6 @@ function renderHomeRecent(){
   }).join('');
 }
 
-/* ============================================================
-   CALENDAR RENDER
-   ============================================================ */
 function renderCalendar(){
   const title = MONTHS[State.calMonth]+' '+State.calYear;
   document.getElementById('cal-title').textContent = title;
@@ -1701,7 +1520,7 @@ function renderCalendar(){
   dowEl.innerHTML = WEEKDAYS_SHORT.map(d=>'<div class="cal-dow">'+d+'</div>').join('');
 
   const first = new Date(State.calYear, State.calMonth, 1);
-  const startOffset = (first.getDay()+6)%7; // Monday=0
+  const startOffset = (first.getDay()+6)%7;
   const daysInMonth = new Date(State.calYear, State.calMonth+1, 0).getDate();
   const notes = Storage.getNotes();
   const todayStr = todayISO();
@@ -1723,9 +1542,6 @@ function renderCalendar(){
   document.getElementById('cal-grid').innerHTML = html;
 }
 
-/* ============================================================
-   DAY VIEW RENDER
-   ============================================================ */
 function renderDay(){
   const iso = State.dayDate;
   const d = parseISO(iso);
@@ -1766,9 +1582,6 @@ function renderDay(){
   }).join('');
 }
 
-/* ============================================================
-   WRITE VIEW RENDER
-   ============================================================ */
 function renderWriteMeta(){
   document.getElementById('write-date-input').value = State.writeDate;
   document.getElementById('write-time-input').value = State.writeTime;
@@ -1892,9 +1705,6 @@ function playBlob(blob){
   });
 }
 
-/* ============================================================
-   SEARCH RENDER
-   ============================================================ */
 function renderSearch(){
   const tags = Storage.getTags();
   const filtersEl = document.getElementById('search-filters');
@@ -1924,9 +1734,6 @@ function runSearch(){
   }).join('');
 }
 
-/* ============================================================
-   TAGS RENDER
-   ============================================================ */
 function renderTags(){
   const tags = Storage.getTags();
   const listEl = document.getElementById('tag-list');
@@ -1979,9 +1786,6 @@ function renderColorGrid(){
   ).join('');
 }
 
-/* ============================================================
-   SETTINGS RENDER
-   ============================================================ */
 function renderSettings(){
   const notes = Storage.getNotes();
   const tags = Storage.getTags();
@@ -1989,9 +1793,6 @@ function renderSettings(){
   document.getElementById('settings-storage').textContent = notes.length+' notes · '+tags.length+' tags · ~'+(bytes/1024).toFixed(1)+' KB used locally';
 }
 
-/* ============================================================
-   EVENT HANDLERS
-   ============================================================ */
 document.addEventListener('click', async (e)=>{
   const navBtn = e.target.closest('button[data-view]');
   if(navBtn){
@@ -2009,14 +1810,12 @@ document.addEventListener('click', async (e)=>{
   }
   if(e.target.id === 'brand-home'){ navigate('home'); return; }
 
-  // Calendar
   if(e.target.id === 'cal-prev'){ State.calMonth--; if(State.calMonth<0){State.calMonth=11; State.calYear--;} renderCalendar(); return; }
   if(e.target.id === 'cal-next'){ State.calMonth++; if(State.calMonth>11){State.calMonth=0; State.calYear++;} renderCalendar(); return; }
   if(e.target.id === 'cal-today'){ const n=new Date(); State.calYear=n.getFullYear(); State.calMonth=n.getMonth(); renderCalendar(); return; }
   const calCell = e.target.closest('.cal-cell[data-date]');
   if(calCell){ State.dayDate = calCell.dataset.date; navigate('day'); return; }
 
-  // Day view / recent / search results -> open day
   const openDay = e.target.closest('[data-open-day]');
   if(openDay){ State.dayDate = openDay.dataset.openDay; navigate('day'); return; }
 
@@ -2040,7 +1839,6 @@ document.addEventListener('click', async (e)=>{
     return;
   }
 
-  // Write view
   if(e.target.id === 'write-close' || e.target.id === 'write-cancel'){
     if(State.isRecording) Audio.cancelRecording();
     navigate(State.writeEditingId ? 'day' : 'home');
@@ -2062,7 +1860,6 @@ document.addEventListener('click', async (e)=>{
 
   if(e.target.id === 'write-save'){ await saveWrite(); return; }
 
-  // Tags view
   if(e.target.id === 'tag-new-btn'){ openTagForm(null); return; }
   if(e.target.id === 'tag-cancel-btn'){ document.getElementById('tag-form').style.display='none'; return; }
   const tagEditBtn = e.target.closest('[data-tag-edit]');
@@ -2079,7 +1876,6 @@ document.addEventListener('click', async (e)=>{
   if(colorOpt){ State.tagFormColor = colorOpt.dataset.color; renderColorGrid(); return; }
   if(e.target.id === 'tag-save-btn'){ saveTagForm(); return; }
 
-  // Settings
   if(e.target.id === 'settings-export'){ doExport(); return; }
   if(e.target.id === 'settings-import-btn'){ document.getElementById('settings-import-file').click(); return; }
   if(e.target.id === 'settings-remove-demo'){
@@ -2147,8 +1943,6 @@ function saveTagForm(){
 }
 
 async function saveWrite(){
-  // If the user hits Save while still recording, stop the recorder first
-  // instead of rejecting the save (named explicitly as a real-world failure mode).
   if(State.isRecording){
     await handleRecordToggle();
   }
@@ -2186,8 +1980,6 @@ async function saveWrite(){
 
     if(State.writeMode === 'audio'){
       if(State.writeAudioIsNew){
-        // A fresh recording was made during this edit: persist it under a new id
-        // and clean up whatever audio was attached before.
         const newAudioId = uid();
         try{ await Audio.saveAudio(newAudioId, State.writeAudioBlob); }
         catch(err){ console.error('Audio save failed', err); toast('Could not save the recording.'); return; }
@@ -2195,14 +1987,10 @@ async function saveWrite(){
         updates.duration = State.writeAudioDuration;
         if(existing && existing.audioId && existing.audioId !== newAudioId){ Audio.deleteAudio(existing.audioId); }
       } else {
-        // Nothing was re-recorded: keep the existing audio attachment as-is,
-        // instead of needlessly re-writing it under a new id on every metadata edit.
         updates.audioId = existing ? existing.audioId : null;
         updates.duration = existing ? existing.duration : State.writeAudioDuration;
       }
     } else if(existing && existing.audioId){
-      // Switched away from audio (or the recording was removed): detach and
-      // clean up the now-orphaned blob instead of silently leaving it attached.
       Audio.deleteAudio(existing.audioId);
       updates.audioId = null;
       updates.duration = null;
@@ -2228,9 +2016,6 @@ async function saveWrite(){
   }
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
 function init(){
   ensureInitialData();
   applyDayTheme();
